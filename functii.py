@@ -51,7 +51,7 @@ driver.command_executor.set_timeout(10000)
 driver.execute_cdp_cmd("Network.setUserAgentOverride", {"userAgent": useragentarray[random.randint(0, 1)]})
 
 
-class Unibet:
+class Unibet: # this class is no longer used but it is good for inspiration
     def __init__(self):
         self.list_sport_sites: list = ["https://www.espn.com/", "https://www.eurosport.ro/",
                                        "https://www.cbssports.com/", "https://www.digisport.ro/",
@@ -114,7 +114,7 @@ class Unibet:
         conn = http.client.HTTPSConnection("betminer.p.rapidapi.com")
 
         headers = {
-            'X-RapidAPI-Key': "e264ff41c2msh9b04d5982c9fb91p1420a8jsn88835ddbea81",
+            'X-RapidAPI-Key': "API_KEY",
             'X-RapidAPI-Host': "betminer.p.rapidapi.com"
         }
 
@@ -783,14 +783,14 @@ class NetBet:
         from live_predictions import generate_league_predictions
         import os
 
-        # 1️⃣ Descarcă CSV-urile dacă nu există
+        #  Descarcă CSV-urile dacă nu există
         download_csvs()
 
-        # 2️⃣ Încarcă toate CSV-urile combinate
+        #  Încarcă toate CSV-urile combinate
         df_combined = load_csvs()
         print(f"CSV încărcat: {len(df_combined)} meciuri combinate")
 
-        # 3️⃣ Procesăm fiecare ligă în parte
+        #  Procesăm fiecare ligă în parte
         leagues = df_combined['League'].unique()
         for league in leagues:
             df_league = df_combined[df_combined['League'] == league].copy()
@@ -804,16 +804,16 @@ class NetBet:
             try:
                 preds = generate_league_predictions(df_league)
                 self.predictions.update(preds)
-                print(f"✅ Predicții generate pentru liga: {league}")
+                print(f" Predicții generate pentru liga: {league}")
             except Exception as e:
                 print(f"[EROARE] La generarea predicțiilor pentru liga {league}: {e}")
 
-        # 4️⃣ Salvăm lista de predicții într-un fișier local pentru verificare
+        #  Salvăm lista de predicții într-un fișier local pentru verificare
         try:
             with open("predictii_generate.txt", "w", encoding="utf-8") as f:
                 for key in self.predictions.keys():
                     f.write(f"{key}\n")
-            print("✅ Fișier 'predictii_generate.txt' salvat cu succes.")
+            print(" Fișier 'predictii_generate.txt' salvat cu succes.")
         except Exception as e:
             print(f"[EROARE] Nu am putut salva fișierul de predicții: {e}")
 
@@ -980,7 +980,7 @@ class NetBet:
         Dacă există o cheie fuzzy salvată anterior, o folosește direct pentru update.
         """
 
-        # 1️⃣ — Folosim cheia fuzzy salvată dacă există
+        # — Folosim cheia fuzzy salvată dacă există
         fuzzy_key = getattr(self, "last_fuzzy_match_key", None)
         if fuzzy_key and fuzzy_key in self.predictions:
             home_team, away_team = fuzzy_key
@@ -998,7 +998,7 @@ class NetBet:
                 print(f"[WARN] Echipele '{home_team_input}' vs '{away_team_input}' nu au fost găsite în predicții.")
                 return None
 
-        # 2️⃣ — Actualizăm predicțiile folosind datele live
+        # — Actualizăm predicțiile folosind datele live
         updated_data = update_match_live(
             self.predictions,
             home_team,
@@ -1017,7 +1017,7 @@ class NetBet:
             free_kicks_away=stats_dict.get("LOVITURI LIBERE", (0, 0))[1]
         )
 
-        # 3️⃣ — Integrare opțională a unei predicții de bază
+        # — Integrare opțională a unei predicții de bază
         if base_prediction is not None:
             try:
                 for key, val in base_prediction.items():
@@ -1068,10 +1068,10 @@ class NetBet:
 
         # dacă am găsit o potrivire foarte bună
         if best_match and best_score >= threshold_strict:
-            print(f"✅ Potrivire exactă: {home_name} vs {away_name} ↔ {best_match} (score={best_score:.1f})")
+            print(f" Potrivire exactă: {home_name} vs {away_name} ↔ {best_match} (score={best_score:.1f})")
             return best_match
 
-        # 2️⃣ Etapa fuzzy tolerantă — doar dacă nu avem potrivire strictă
+        #  Etapa fuzzy tolerantă — doar dacă nu avem potrivire strictă
         for key in self.predictions.keys():
             home_pred, away_pred = key
 
@@ -1089,7 +1089,7 @@ class NetBet:
 
         # verificăm dacă rezultatul fuzzy e suficient de bun
         if best_match and best_score >= threshold_fuzzy:
-            print(f"✅ Potrivire fuzzy directă: {home_name} vs {away_name} ↔ {best_match} (score={best_score:.1f})")
+            print(f" Potrivire fuzzy directă: {home_name} vs {away_name} ↔ {best_match} (score={best_score:.1f})")
             return best_match
         else:
             print(f"[WARN] Nicio potrivire sigură pentru {home_name} vs {away_name} (max={best_score:.1f})")
@@ -1114,7 +1114,7 @@ class NetBet:
     #             best_match = key
     #
     #     if best_match and best_score >= threshold:
-    #         print(f"✅ Potrivire fuzzy: {home_name} vs {away_name} ↔ {best_match} (avg={best_score:.1f})")
+    #         print(f" Potrivire fuzzy: {home_name} vs {away_name} ↔ {best_match} (avg={best_score:.1f})")
     #         return best_match
     #     else:
     #         print(f"[WARN] Nicio potrivire fuzzy bună pentru {home_name} vs {away_name} (max={best_score:.1f})")
@@ -1141,13 +1141,13 @@ class NetBet:
             time.sleep(2)
             driver.find_element(by=By.ID, value="username").click()
             time.sleep(1)
-            # driver.find_element(by=By.ID, value="username").send_keys("florinlucianursu")
-            username = "florinlucianursu"
+            # driver.find_element(by=By.ID, value="username").send_keys("*****")
+            username = "*****"
             for character in username:
                 driver.find_element(by=By.ID, value="username").send_keys(character)
                 # driver.find_element(by=By.CLASS_NAME, value="JwHSmjKp31hKtQ2IlhMo.aZUYEwdsDNr8rfFCLmPq").send_keys(character)
                 time.sleep(random.uniform(0.3, 1))
-            password = "5840707"
+            password = "*****"
             for character in password:
                 driver.find_element(by=By.ID, value="password").send_keys(character)
                 # driver.find_element(by=By.CLASS_NAME, value="JwHSmjKp31hKtQ2IlhMo.aZUYEwdsDNr8rfFCLmPq").send_keys(character)
@@ -1210,7 +1210,7 @@ class NetBet:
                 driver.switch_to.frame(driver.find_element(by=By.CLASS_NAME, value="safe-top.safe-left.safe-right.safe-bottom.z-50"))
                 print("am schimbat frame-ul")
                 time.sleep(2)
-                # driver.find_element(by=By.CLASS_NAME, value="JwHSmjKp31hKtQ2IlhMo.aZUYEwdsDNr8rfFCLmPq").send_keys("Lucian")
+                # driver.find_element(by=By.CLASS_NAME, value="JwHSmjKp31hKtQ2IlhMo.aZUYEwdsDNr8rfFCLmPq").send_keys("")
                 self.counter += 1
             case 6:
                 # self.counter += 1
@@ -1771,7 +1771,7 @@ class NetBet:
                 print("case 9 - extrag predicții")
                 self.event_predicitons_list = []
 
-                # 1️⃣ extragem datele live
+                # extragem datele live
                 home, away, score_h, score_a, stats = self.extract_live_data()
                 if home == "none":
                     print("Nu am putut extrage date pentru " + self.meciextras)
@@ -1783,7 +1783,7 @@ class NetBet:
                         self.counter = 0
                     return
 
-                # 2️⃣ facem fuzzy match pentru a găsi cheia corectă în predicții
+                # facem fuzzy match pentru a găsi cheia corectă în predicții
                 prediction_key = self.find_match_in_predictions(home, away)
                 if not prediction_key:
                     print(f"[WARN] Echipele '{home}' vs '{away}' nu au fost găsite în predicții.")
@@ -1796,19 +1796,19 @@ class NetBet:
 
                 print(f"[INFO] Folosesc cheia fuzzy găsită: {prediction_key}")
 
-                # 3️⃣ încărcăm predicția de bază
+                # încărcăm predicția de bază
                 base_prediction = self.predictions.get(prediction_key, {})
                 if not base_prediction:
                     print(f"[WARN] Nu am găsit predicții inițiale pentru {home} vs {away}. Se folosește fallback.")
                     base_prediction = {}
                     time.sleep(random.randint(3, 5))
 
-                # 4️⃣ actualizăm predicțiile folosind datele live
+                # actualizăm predicțiile folosind datele live
                 match_prediction = self.update_predictions_for_match(
                     home, away, score_h, score_a, stats, base_prediction
                 )
 
-                # 5️⃣ validare rezultate
+                # validare rezultate
                 if not match_prediction or 'probs_ou' not in match_prediction:
                     print(f"Nu există predicții valide pentru {home} vs {away}")
                     self.meciuri_negasite_in_predictii += 1
@@ -1818,7 +1818,7 @@ class NetBet:
                         self.counter = 0
                     return
 
-                # 6️⃣ construim lista de recomandări din probabilitățile OU
+                # construim lista de recomandări din probabilitățile OU
                 for line, prob_dict in match_prediction['probs_ou'].items():
                     if prob_dict['over'] >= 70:
                         self.event_predicitons_list.append(f"Peste ({line})")
@@ -2307,7 +2307,7 @@ class NetBet:
                 self.end_of_function()
 
     def main_loop(self, username, password, procent_de_pariere_min, procent_de_pariere_max):
-        # ✅ Startup: se execută o singură dată la pornirea bot-ului
+        # Startup: se execută o singură dată la pornirea bot-ului
         if not getattr(self, "startup_done", False):
             now = datetime.datetime.now().time()
             print("=== Startup verificări case 7 ===")
