@@ -51,7 +51,7 @@ driver.command_executor.set_timeout(10000)
 driver.execute_cdp_cmd("Network.setUserAgentOverride", {"userAgent": useragentarray[random.randint(0, 1)]})
 
 
-class Unibet: # this class is no longer used but it is good for inspiration
+class Unibet: # this class is no longer used but it is good for inspiration - > chackout class NetBet
     def __init__(self):
         self.list_sport_sites: list = ["https://www.espn.com/", "https://www.eurosport.ro/",
                                        "https://www.cbssports.com/", "https://www.digisport.ro/",
